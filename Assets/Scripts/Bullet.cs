@@ -6,28 +6,48 @@ public class Bullet : MonoBehaviour
 {
     public ParticleSystem particleSystem;
     float speed = 10f;
+    public int damage = 3;
     bool alreadyDestroyed = false;
     public GameObject spawnParent;
+    public float delayToShootMax = 0f;
+    private float delayTimer;
 
     void Start()
     {
-        LeanTween.delayedCall(2f, DestroySelf);
+        LeanTween.delayedCall(4f, DestroySelf);
+        delayTimer = delayToShootMax;
     }
 
     void Update()
     {
-        transform.position += transform.up * Time.deltaTime * speed;
+        if(delayTimer > 0f)
+        {
+            delayTimer -= Time.deltaTime;
+        }
+        else
+        {
+            transform.position += transform.up * Time.deltaTime * speed;
+        }
+        
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if(spawnParent != null)
+        print("hit: " + collision.gameObject.name);
+
+        if(spawnParent == collision.gameObject)
         {
-            if(spawnParent == collision.gameObject)
+            return;
+        }
+        else
+        {
+            Damageable d = collision.gameObject.GetComponent<Damageable>();
+            if(d != null)
             {
-                return;
+                d.StartDamage(damage);
             }
         }
+        
         DestroySelf();
     }
 

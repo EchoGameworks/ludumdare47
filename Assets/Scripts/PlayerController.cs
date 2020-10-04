@@ -3,8 +3,12 @@ using System.Collections.Generic;
 using UnityEngine;
 using Constants;
 
-public class PlayerController : MonoBehaviour
+public class PlayerController : Damageable
 {
+    public bool IsClone = false;
+    //public 
+    GameManager gameManager;
+    UIManager uiManager;
     Controls input;
     Camera mainCam;
 
@@ -28,10 +32,8 @@ public class PlayerController : MonoBehaviour
 
     private float drag_Grounded = 1f;
     private float drag_Jump = 1f;
-    private float fallMultiplier = 2.5f;
+    private float fallMultiplier = 3.2f;
 
-    public int health;
-    public int maxHealth = 100;
     private float spawnDistance = 0.75f;
     public SkillTypes CurrentSkillType;
     public List<SkillTypes> UnlockedSkillTypes;
@@ -45,32 +47,88 @@ public class PlayerController : MonoBehaviour
         m_Rigidbody2D = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
         mainCam = Camera.main;
-        GameManager.instance.playerController = this;
-        input = GameManager.instance.Controls;
+        gameManager = GameManager.instance;
+        gameManager.playerController = this;
+        uiManager = gameManager.uiManager;
+        input = gameManager.Controls;
         input.Player.Move.performed += Move_performed;
         input.Player.Move.canceled += Move_canceled;
         input.Player.Jump.performed += Jump_performed;
         input.Player.Jump.canceled += Jump_canceled;
+        input.Player.Drop.performed += Drop_performed;
         input.Player.Action.performed += Action_performed;
         ResetGame();
-        ResetLife();
+        ResetHealth();
+
+        //var seq = LeanTween.sequence();
+        //seq.append(5f);
+        //seq.append(() => StartDamage(5));
+        //seq.append(1f);
+        //seq.append(() => StartDamage(15));
+        //seq.append(1f);
+        //seq.append(() => StartDamage(50));
+        //seq.append(1f);
+        //seq.append(() => StartDamage(50));
     }
+
+    private void Drop_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
+    {
+        Collider2D[] colliders = Physics2D.OverlapCircleAll(m_GroundCheck.position, k_GroundedRadius, m_WhatIsGround);
+        for (int i = 0; i < colliders.Length; i++)
+        {
+            if (colliders[i].gameObject != gameObject)
+            {
+                WoodenPlatform wp = colliders[i].gameObject.GetComponent<WoodenPlatform>();
+                if (wp != null)
+                {
+                    wp.TogglePlatformDirection();
+                }
+
+            }
+        }
+    }
+
+    public override void Die()
+    {
+        //print("died");
+        gameManager.uiManager.ShowDeathBanner();
+        gameManager.Respawn();
+    }
+
+    public override void TakeDamage()
+    {
+        uiManager.UpdatePlayerHealth(Health / (float)HealthMax);
+    }
+
+    //public void ResetLife()
+    //{
+    //    Health = HealthMax;
+    //    TakeDamage();
+    //}
 
     private void Update()
     {
-        if(abilityCooldownTimer > 0)
+        if (!IsClone)
         {
-            abilityCooldownTimer -= Time.deltaTime;
+            if (abilityCooldownTimer > 0)
+            {
+                abilityCooldownTimer -= Time.deltaTime;
+            }
+            else
+            {
+                abilityCooldownTimer = 0f;
+            }
+
+            if (m_Rigidbody2D.velocity.y < 0)
+            {
+                m_Rigidbody2D.velocity += Vector2.up * Physics2D.gravity.y * (fallMultiplier - 1) * Time.deltaTime;
+            }
         }
         else
         {
-            abilityCooldownTimer = 0f;
+
         }
 
-        if(m_Rigidbody2D.velocity.y < 0)
-        {
-            m_Rigidbody2D.velocity += Vector2.up * Physics2D.gravity.y * (fallMultiplier - 1) * Time.deltaTime;
-        }    
     }
 
     private void FixedUpdate()
@@ -100,10 +158,7 @@ public class PlayerController : MonoBehaviour
         UnlockedSkillTypes.Add(SkillTypes.Normal);
     }
 
-    public void ResetLife()
-    {
-        health = maxHealth;
-    }
+
 
     public void Move()
     {
@@ -220,6 +275,13 @@ public class PlayerController : MonoBehaviour
                 abilityCooldownTimer = bulletCooldown;
                 break;
         }
+    }
+
+    public void DefeatedBoss()
+    {
+        print("player defeated boss");
+        Health += 50;
+        TakeDamage();
     }
 
 }

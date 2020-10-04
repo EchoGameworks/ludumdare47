@@ -11,6 +11,7 @@ public class Reticle : MonoBehaviour
     {
         mainCam = Camera.main;
         input = GameManager.instance.Controls;
+        transform.position = new Vector3(-500f, -500f, 0f);
 
 #if !UNITY_EDITOR
         Cursor.visible = false;

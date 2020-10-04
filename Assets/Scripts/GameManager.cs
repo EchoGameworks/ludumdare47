@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using Constants;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -7,15 +8,31 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager instance;
     public Controls Controls;
+    public UIManager uiManager;
+    public GameObject StartCamera;
+    public List<GameObject> InitCameras;
 
-
-    public int TotalPotionsCount = 0;
-    public int CollectedPotionsCount;
+    public GameObject PlayerGO;
+    public Transform RespawnLocation;
+    public CameraTransition RespawnTransition;
 
     public PlayerController playerController;
-
-    public int CurrentLevel = 1;
     public bool IsTesting = false;
+
+    public bool RunTimer = false;
+
+    public float Timer;
+    private float TimerMax = 30f;
+
+
+    public Transform Spawn_PlayerStart;
+
+    public GameObject Icetopus;
+    private Icetopus icetopusLogic;
+    public Transform SpawnLocation_Icetopus;
+
+    public GameObject Volture;
+    public Transform SpawnLocation_Volture;
 
     void Awake()
     {
@@ -39,34 +56,93 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
-        //if (!IsTesting)
-        //{
-        //    SceneManager.LoadSceneAsync(1, LoadSceneMode.Additive);
-        //}
-        //else
-        //{
-        //    PlayTestSceneCurrentLevel();
-        //}
+        icetopusLogic = Icetopus.GetComponent<Icetopus>();
+        if (!IsTesting)
+        {
+            foreach (GameObject go in InitCameras)
+            {
+                go.SetActive(false);
+            }
+            StartCamera.SetActive(true);
+            PlayerGO.transform.position = Spawn_PlayerStart.position;
+        }
+        else
+        {
+            Respawn();
+        }
+        
+
     }
 
-    //public void ResetFullGame()
-    //{        
-    //    SceneManager.UnloadSceneAsync(CurrentLevel);
-        
-    //    SceneManager.LoadSceneAsync(CurrentLevel, LoadSceneMode.Additive);
-    //    AudioManager.instance.MixToForward();
-    //}
-
-    public void PlayTestSceneCurrentLevel()
+    public void ResetFullGame()
     {
-        Scene[] loadedScenes = GetLoadedScenes();
-        for (int i = 0; i < loadedScenes.Length; i++)
+
+    }
+
+    private void Update()
+    {
+        if (RunTimer)
         {
-            if (loadedScenes[i].buildIndex != 0)
+            if(Timer > 0)
             {
-                CurrentLevel = loadedScenes[i].buildIndex;
-                return;
+                Timer -= Time.deltaTime;
             }
+            else
+            {
+                Timer = TimerMax;
+                print("spawn char");
+            }
+            uiManager.UpdateTimer(Timer);
+        }
+    }
+
+    public void StartTimer()
+    {
+        RunTimer = true;
+    }
+
+    public void StopTimer()
+    {
+        RunTimer = false;
+    }
+
+    public void ResetTimer()
+    {
+        RunTimer = false;
+        Timer = TimerMax;
+    }
+
+    public void InitBoss()
+    {
+        ResetTimer();
+        uiManager.Timer_PopIn();
+        uiManager.BossHealth_PopIn();
+    }
+
+    public void Respawn()
+    {
+        icetopusLogic.StopFight();
+
+        StopTimer();
+        uiManager.Timer_PopOut();
+        playerController.ResetHealth();
+        uiManager.BossHealth_PopOut();
+        PlayerGO.transform.position = RespawnLocation.position;
+        RespawnTransition.RespawnReset();
+    }
+
+    public void SetupBoss(SkillTypes bossType)
+    {
+        ResetTimer();
+        uiManager.Timer_PopIn();
+        uiManager.BossHealth_PopIn();
+        switch (bossType)
+        {
+            case SkillTypes.Ice:
+                Icetopus.transform.position = SpawnLocation_Icetopus.position;
+                Icetopus bossLogic = Icetopus.GetComponent<Icetopus>();
+                bossLogic.StartFight();
+                break;
         }
     }
 
@@ -82,36 +158,13 @@ public class GameManager : MonoBehaviour
         return loadedScenes;
     }
 
-    public void LoadNextLevel()
-    {
-        //SceneManager.UnloadSceneAsync(CurrentLevel);
-        //CurrentLevel++;
-        //if (CurrentLevel >= SceneManager.sceneCountInBuildSettings)
-        //{
-        //    CurrentLevel = 1;
-        //    MainMenu.instance.MenuNumber = 4;
-        //    MainMenu.instance.UpdateMenu();
-        //}
-        //SceneManager.LoadSceneAsync(CurrentLevel, LoadSceneMode.Additive);
-        //AudioManager.instance.MixToForward();
-    }
-
-    public void ReloadLevel()
-    {
-        //SceneManager.UnloadSceneAsync(CurrentLevel);
-        //SceneManager.LoadSceneAsync(CurrentLevel, LoadSceneMode.Additive);
-        //AudioManager.instance.MixToForward();
-    }
-
     private void OnEnable()
     {
         Controls.Player.Enable();
-        //Inputs.Menu.Enable();
     }
 
     private void OnDisable()
     {
         Controls.Player.Disable();
-        //Inputs.Menu.Disable();
     }
 }

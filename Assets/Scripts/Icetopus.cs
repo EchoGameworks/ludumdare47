@@ -7,7 +7,7 @@ public class Icetopus : Boss
 {
     public GameObject prefab_IceDagger;
     public GameObject prefab_IceOrb;
-
+    public Transform cleanupTransform;
     int moveID;
     public SoundEffects IceDaggers_Spawn;
 
@@ -21,7 +21,8 @@ public class Icetopus : Boss
     public override void Action1()
     {
         //print("A1");
-        GameObject goOrb = Instantiate(prefab_IceOrb, null);
+        Action4();
+        GameObject goOrb = Instantiate(prefab_IceOrb, cleanupTransform);
         goOrb.transform.position = this.transform.position;
         Ice_Homing orbHoming = goOrb.GetComponent<Ice_Homing>();
         orbHoming.Target = Player;
@@ -42,7 +43,7 @@ public class Icetopus : Boss
         angle += Random.Range(-10, 10);
         for (int i = 0; i < spawnCount; i++)
         {
-            GameObject daggerGO = Instantiate(prefab_IceDagger, null);
+            GameObject daggerGO = Instantiate(prefab_IceDagger, cleanupTransform);
             daggerGO.transform.rotation = Quaternion.Euler(0f, 0f, angle - 90f - spreadAngle + startAngle + incrementAngle);
             var q = Quaternion.AngleAxis(angle, Vector3.forward);
             daggerGO.transform.position = this.transform.position + q * Vector3.right * spawnDistance;
@@ -72,6 +73,10 @@ public class Icetopus : Boss
     public override void Die()
     {
         base.Die();
+        //foreach (Transform t in cleanupTransform)
+        //{
+        //    GameObject.Destroy(t.gameObject);
+        //}
         AudioManager.instance.PlaySound(DeathSound);
         LeanTween.scale(gameObject, Vector3.zero, 1f).setEaseInOutCirc();
         GameManager.instance.BossDefeated();

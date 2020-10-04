@@ -157,6 +157,7 @@ MonoBehaviour:
   invulnerableTimerMax: 0.5
   IsVulnerable: 1
   SpriteRend: {fileID: 7750370290495038163}
+  MainColor: {r: 0, g: 0, b: 0, a: 0}
   IsClone: 0
   PersonalTimer: 0
   cloneEventIndex: 0
@@ -214,5 +215,5 @@ Rigidbody2D:
   m_Material: {fileID: 0}
   m_Interpolate: 0
   m_SleepingMode: 1
-  m_CollisionDetection: 0
+  m_CollisionDetection: 1
   m_Constraints: 4

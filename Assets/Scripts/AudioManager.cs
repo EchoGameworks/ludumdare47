@@ -135,7 +135,9 @@ public class AudioManager : MonoBehaviour
     public void PlaySound(SoundEffects soundEffect)
     {
         Sound s = Sounds.FirstOrDefault(o => o.SoundName == soundEffect);
+        //print("playing" + s.SoundName);
         if (s == null || !canPlay || onHold) return;
+        //print("def playing" + s.SoundName);
         s.source.volume = MasterSFXVolume * s.Volume;
         s.source.pitch = s.Pitch;
         //print("playing: " + soundEffect + " at " + s.source.volume + " (" + MasterSFXVolume + " | " + s.Volume + ")");

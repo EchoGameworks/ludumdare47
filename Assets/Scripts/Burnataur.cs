@@ -5,7 +5,7 @@ using UnityEngine;
 public class Burnataur : Boss
 {
     public GameObject prefab_Fireball;
-
+    public Transform cleanupTransform;
     public List<Transform> fireballLandSpawnLocations;
     public List<Transform> fireballFromTopLocations1;
     public List<Transform> fireballFromTopLocations2;
@@ -67,7 +67,7 @@ public class Burnataur : Boss
     {
         foreach(Transform t in fireballLandSpawnLocations)
         {
-            GameObject fireGO =  Instantiate(prefab_Fireball, null);
+            GameObject fireGO =  Instantiate(prefab_Fireball, cleanupTransform);
             fireGO.transform.position = t.position;
             fireGO.transform.rotation = t.rotation;
             fireGO.transform.localScale = Vector3.zero;
@@ -80,7 +80,7 @@ public class Burnataur : Boss
     {
         foreach (Transform t in fireballFromTopLocations1)
         {
-            GameObject fireGO = Instantiate(prefab_Fireball, null);
+            GameObject fireGO = Instantiate(prefab_Fireball, cleanupTransform);
             fireGO.transform.position = t.position;
             fireGO.transform.rotation = t.rotation;
             fireGO.transform.localScale = Vector3.zero;
@@ -93,7 +93,7 @@ public class Burnataur : Boss
     {
         foreach (Transform t in fireballFromTopLocations2)
         {
-            GameObject fireGO = Instantiate(prefab_Fireball, null);
+            GameObject fireGO = Instantiate(prefab_Fireball, cleanupTransform);
             fireGO.transform.position = t.position;
             fireGO.transform.rotation = t.rotation;
             fireGO.transform.localScale = Vector3.zero;
@@ -105,6 +105,10 @@ public class Burnataur : Boss
     public override void Die()
     {
         base.Die();
+        //foreach (Transform t in cleanupTransform)
+        //{
+        //    GameObject.Destroy(t.gameObject);
+        //}
         AudioManager.instance.PlaySound(DeathSound);
         LeanTween.scale(gameObject, Vector3.zero, 1f).setEaseInOutCirc();
         GameManager.instance.BossDefeated();

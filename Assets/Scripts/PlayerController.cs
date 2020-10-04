@@ -63,23 +63,20 @@ public class PlayerController : Damageable
         input.Player.Jump.canceled += Jump_canceled;
         input.Player.Drop.performed += Drop_performed;
         input.Player.Action.performed += Action_performed;
+        input.Player.Escape.performed += Escape_performed;
         ResetGame();
         if (!IsClone)
         {
             MainColor = SpriteRend.color;
             ResetHealth();
+            //if (gameManager.IsTesting) gameManager.BossDefeated();
         }
-        
 
-        //var seq = LeanTween.sequence();
-        //seq.append(5f);
-        //seq.append(() => StartDamage(5));
-        //seq.append(1f);
-        //seq.append(() => StartDamage(15));
-        //seq.append(1f);
-        //seq.append(() => StartDamage(50));
-        //seq.append(1f);
-        //seq.append(() => StartDamage(50));
+    }
+
+    private void Escape_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
+    {
+        Application.Quit();
     }
 
     private void Drop_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
@@ -384,7 +381,7 @@ public class PlayerController : Damageable
 
     public void DefeatedBoss()
     {
-        print("player defeated boss");
+        //print("player defeated boss");
         PersonalTimer = 0f;
         Health = 100;
         TakeDamage();

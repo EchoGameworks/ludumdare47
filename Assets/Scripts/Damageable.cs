@@ -56,6 +56,7 @@ public class Damageable : MonoBehaviour
             {
                 if (HasSound)
                 {
+                    //print("playing dmg sound");
                     AudioManager.instance.PlaySound(HurtSound);
                 }
 

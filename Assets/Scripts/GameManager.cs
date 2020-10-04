@@ -84,7 +84,7 @@ public class GameManager : MonoBehaviour
         {
             Respawn();
         }
-        
+
 
     }
 
@@ -115,7 +115,7 @@ public class GameManager : MonoBehaviour
                 PlayerController clonePC = cloneGO.GetComponent<PlayerController>();
                 clonePC.ConfigureClone();
                 SpriteRenderer cloneSR = cloneGO.GetComponent<SpriteRenderer>();
-                clonePC.MainColor = new Color(0.35f, 0.35f, 0.35f, 0.75f);
+                clonePC.MainColor = new Color(0.55f, 0.55f, 0.55f, 0.75f);
                 cloneSR.color = clonePC.MainColor;
                 cloneGO.transform.position = clone_SpawnLocation.position;
                 //print("spawn char");
@@ -195,7 +195,7 @@ public class GameManager : MonoBehaviour
             case SkillTypes.Normal:
                 UroGO.transform.position = SpawnLocation_Uro.position;
                 Uro uro_bossLogic = UroGO.GetComponent<Uro>();
-                //uro_bossLogic.StartFight();
+                uro_bossLogic.StartFight();
                 break;
         }
     }
@@ -215,8 +215,9 @@ public class GameManager : MonoBehaviour
     public void BossDefeated()
     {
         bossDefeatNum++;
-        AudioManager.instance.MixSongs();        
-        if(bossDefeatNum > 1)
+        AudioManager.instance.MixSongs();
+        ClearBossArea();
+        if (bossDefeatNum > 1)
         {
             Portal_Uro.OpenPortal();
         }

@@ -35,7 +35,7 @@ public class Boss : Damageable
         TakeDamage();
         //Start
         
-        LeanTween.delayedCall(1f, CommenceFight);
+        LeanTween.delayedCall(2.5f, CommenceFight);
     }
 
     public void StopFight()

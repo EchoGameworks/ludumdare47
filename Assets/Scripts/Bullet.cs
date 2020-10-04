@@ -14,10 +14,12 @@ public class Bullet : MonoBehaviour
     private float delayTimer;
     public SoundEffects ShootSound;
     public bool HasSound = true;
+    public float destroySelfTime = 4f;
+    public bool DestroyOnContact = true;
 
     void Start()
     {
-        LeanTween.delayedCall(4f, DestroySelf);
+        LeanTween.delayedCall(destroySelfTime, DestroySelf);
         delayTimer = delayToShootMax;
         if (HasSound)
         {
@@ -55,8 +57,11 @@ public class Bullet : MonoBehaviour
                 d.StartDamage(damage);
             }
         }
+        if (DestroyOnContact)
+        {
+            DestroySelf();
+        }
         
-        DestroySelf();
     }
 
     private void DestroySelf()

@@ -47,13 +47,13 @@ public class Icetopus : Boss
 
     public override void Action3()
     {
-        print("A3");
+        //print("A3");
         Action2();
     }
 
     public override void Action4()
     {
-        print("A4");
+        //print("A4");
         Action2();
     }
 

@@ -6,7 +6,10 @@ using Constants;
 public class PlayerController : Damageable
 {
     public bool IsClone = false;
-    //public 
+    public float PersonalTimer = 0f;
+    public int cloneEventIndex = 0;
+    public LayerMask cloneLayer;
+
     GameManager gameManager;
     UIManager uiManager;
     Controls input;
@@ -42,6 +45,8 @@ public class PlayerController : Damageable
     public float abilityCooldownTimer;
     public float bulletCooldown = 0.3f;
 
+    public EventData nextEventToExecute;
+
     void Start()
     {
         m_Rigidbody2D = GetComponent<Rigidbody2D>();
@@ -73,6 +78,12 @@ public class PlayerController : Damageable
 
     private void Drop_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
     {
+        if (!IsClone) Main_Drop();
+    }
+
+    private void Main_Drop()
+    {
+        if (!IsClone) gameManager.AddToQueue(new DropEvent(PersonalTimer));
         Collider2D[] colliders = Physics2D.OverlapCircleAll(m_GroundCheck.position, k_GroundedRadius, m_WhatIsGround);
         for (int i = 0; i < colliders.Length; i++)
         {
@@ -100,35 +111,92 @@ public class PlayerController : Damageable
         uiManager.UpdatePlayerHealth(Health / (float)HealthMax);
     }
 
-    //public void ResetLife()
-    //{
-    //    Health = HealthMax;
-    //    TakeDamage();
-    //}
+
+    
+    public void ConfigureClone()
+    {
+        Start();
+        this.gameObject.layer = LayerMask.NameToLayer("Ghost");
+        IsClone = true;
+        nextEventToExecute = gameManager.listEvents[cloneEventIndex];
+    }
+
+    private void TriggerEvent()
+    {
+        //print("trigger: " + nextEventToExecute.GetType());
+        MoveEvent me = nextEventToExecute as MoveEvent;
+        if (me != null)
+        {
+            //print("clone is moving");
+            Main_Move(me.MoveData);
+            cloneEventIndex++;
+        }
+
+        JumpEvent je = nextEventToExecute as JumpEvent;
+        if (je != null)
+        {
+            //print("clone is jumping");
+            Main_Jump(je.JumpData);
+            cloneEventIndex++;
+        }
+
+        DropEvent de = nextEventToExecute as DropEvent;
+        if (de != null)
+        {
+            //print("clone is dropping");
+            Main_Drop();
+            cloneEventIndex++;
+        }
+
+        BulletEvent be = nextEventToExecute as BulletEvent;
+        if (be != null)
+        {
+            print("clone is bulleting");
+            Main_Action(be.MouseScreenPos);
+            cloneEventIndex++;
+        }
+
+        if(gameManager.listEvents.Count > cloneEventIndex)
+        {
+            nextEventToExecute = gameManager.listEvents[cloneEventIndex];
+        }
+        
+    }
 
     private void Update()
     {
-        if (!IsClone)
+        if (IsClone)
         {
-            if (abilityCooldownTimer > 0)
+            if (gameManager.listEvents.Count - 1 == cloneEventIndex)
             {
-                abilityCooldownTimer -= Time.deltaTime;
+                nextEventToExecute = gameManager.listEvents[cloneEventIndex];
             }
-            else
+            if (PersonalTimer >= nextEventToExecute.TimeTriggered)
             {
-                abilityCooldownTimer = 0f;
+                TriggerEvent();
             }
+        }
 
-            if (m_Rigidbody2D.velocity.y < 0)
-            {
-                m_Rigidbody2D.velocity += Vector2.up * Physics2D.gravity.y * (fallMultiplier - 1) * Time.deltaTime;
-            }
+        if (abilityCooldownTimer > 0)
+        {
+            abilityCooldownTimer -= Time.deltaTime;
         }
         else
         {
-
+            abilityCooldownTimer = 0f;
         }
 
+        if (m_Rigidbody2D.velocity.y < 0)
+        {
+            m_Rigidbody2D.velocity += Vector2.up * Physics2D.gravity.y * (fallMultiplier - 1) * Time.deltaTime;
+        }
+        
+
+        if (gameManager.RunTimer)
+        {
+            PersonalTimer += Time.deltaTime;
+        }
+        
     }
 
     private void FixedUpdate()
@@ -145,7 +213,6 @@ public class PlayerController : Damageable
             {
                 m_Grounded = true;
                 //if (!wasGrounded) AudioManager.instance.PlaySound(AudioManager.SoundEffects.CharacterLanding);
-
             }
         }
 
@@ -156,6 +223,7 @@ public class PlayerController : Damageable
     {
         UnlockedSkillTypes = new List<SkillTypes>();
         UnlockedSkillTypes.Add(SkillTypes.Normal);
+        PersonalTimer = 0f;
     }
 
 
@@ -233,39 +301,58 @@ public class PlayerController : Damageable
 
     private void Jump_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
     {
-        jump = true;        
+        if (!IsClone) Main_Jump(true);
     }
 
     private void Jump_canceled(UnityEngine.InputSystem.InputAction.CallbackContext obj)
     {
-        jump = false;
+        if (!IsClone) Main_Jump(false);
+    }
+
+    private void Main_Jump(bool isJump)
+    {
+        if (!IsClone) gameManager.AddToQueue(new JumpEvent(PersonalTimer, isJump));
+        jump = isJump;
     }
 
     private void Move_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
     {
-        float vMove = obj.ReadValue<float>();       
-        move = vMove;
+        float vMove = obj.ReadValue<float>();
+        if (!IsClone) Main_Move(vMove);
     }
 
     private void Move_canceled(UnityEngine.InputSystem.InputAction.CallbackContext obj)
     {
-        move = 0f;
+        if (!IsClone) Main_Move(0f);
+    }
+
+    private void Main_Move(float moveValue)
+    {
+        if (!IsClone) gameManager.AddToQueue(new MoveEvent(PersonalTimer, moveValue));
+        move = moveValue;
     }
 
 
     private void Action_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
     {
-        if (abilityCooldownTimer > 0) return;
+        Vector2 mouseScreenPos = input.Player.Mouse.ReadValue<Vector2>();
+        if (!IsClone) Main_Action(mouseScreenPos);
+    }
+
+    private void Main_Action(Vector2 mouseScreenPos)
+    {
+        if (abilityCooldownTimer > 0) return;        
         switch (CurrentSkillType)
         {
             case SkillTypes.Fire:
 
                 break;
             default:
+                if (!IsClone) gameManager.AddToQueue(new BulletEvent(PersonalTimer, mouseScreenPos));
                 GameObject bulletGO = Instantiate(prefab_Bullet, null, true);
                 Bullet b = bulletGO.GetComponent<Bullet>();
                 b.spawnParent = this.gameObject;
-                Vector2 mouseScreenPos = input.Player.Mouse.ReadValue<Vector2>();
+                
                 Vector3 mouseWorldPos = mainCam.ScreenToWorldPoint(new Vector3(mouseScreenPos.x, mouseScreenPos.y, 0f));
                 Vector3 moveDir = mouseWorldPos - this.transform.position;
                 float angle = Mathf.Atan2(moveDir.y, moveDir.x) * Mathf.Rad2Deg;
@@ -280,6 +367,7 @@ public class PlayerController : Damageable
     public void DefeatedBoss()
     {
         print("player defeated boss");
+        PersonalTimer = 0f;
         Health += 50;
         TakeDamage();
     }

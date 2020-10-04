@@ -33,7 +33,7 @@ public class Bullet : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        print("hit: " + collision.gameObject.name);
+        //print("hit: " + collision.gameObject.name);
 
         if(spawnParent == collision.gameObject)
         {

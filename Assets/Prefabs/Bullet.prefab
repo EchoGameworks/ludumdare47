@@ -113,7 +113,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   particleSystem: {fileID: 0}
-  damage: 20
+  damage: 5
   spawnParent: {fileID: 0}
   delayToShootMax: 0
 --- !u!50 &1255857070833115952

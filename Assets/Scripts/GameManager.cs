@@ -6,11 +6,15 @@ using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
+    public SkillTypes CurrentBoss;
     public static GameManager instance;
     public Controls Controls;
     public UIManager uiManager;
     public GameObject StartCamera;
     public List<GameObject> InitCameras;
+
+    public GameObject prefab_Player;
+    public Transform clone_SpawnLocation;
 
     public GameObject PlayerGO;
     public Transform RespawnLocation;
@@ -21,9 +25,11 @@ public class GameManager : MonoBehaviour
 
     public bool RunTimer = false;
 
+    public List<GameObject> cloneList;
     public float Timer;
-    private float TimerMax = 30f;
+    private float TimerMax = 5f;
 
+    public List<EventData> listEvents;
 
     public Transform Spawn_PlayerStart;
 
@@ -56,6 +62,7 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
+        listEvents = new List<EventData>();
         icetopusLogic = Icetopus.GetComponent<Icetopus>();
         if (!IsTesting)
         {
@@ -74,6 +81,12 @@ public class GameManager : MonoBehaviour
 
     }
 
+    public void AddToQueue(EventData ed)
+    {
+        listEvents.Add(ed);
+        //print("New Event: " + ed.GetType() + " | Event Count: " + listEvents.Count);
+    }
+
     public void ResetFullGame()
     {
 
@@ -90,9 +103,24 @@ public class GameManager : MonoBehaviour
             else
             {
                 Timer = TimerMax;
+                GameObject cloneGO = Instantiate(prefab_Player, null);
+                cloneList.Add(cloneGO);
+                PlayerController clonePC = cloneGO.GetComponent<PlayerController>();
+                clonePC.ConfigureClone();
+                SpriteRenderer cloneSR = cloneGO.GetComponent<SpriteRenderer>();
+                cloneSR.color = new Color(0.35f, 0.35f, 0.35f, 0.75f);
+                cloneGO.transform.position = clone_SpawnLocation.position;
                 print("spawn char");
             }
             uiManager.UpdateTimer(Timer);
+        }
+    }
+
+    public void ClearBossArea()
+    {
+        foreach(GameObject go in cloneList)
+        {
+            Destroy(go);
         }
     }
 
@@ -113,10 +141,17 @@ public class GameManager : MonoBehaviour
     }
 
     public void InitBoss()
-    {
+    {        
+        ClearQueue();
         ResetTimer();
         uiManager.Timer_PopIn();
         uiManager.BossHealth_PopIn();
+    }
+
+    public void ClearQueue()
+    {
+        cloneList = new List<GameObject>();
+        listEvents = new List<EventData>();
     }
 
     public void Respawn()
@@ -131,11 +166,11 @@ public class GameManager : MonoBehaviour
         RespawnTransition.RespawnReset();
     }
 
-    public void SetupBoss(SkillTypes bossType)
+    public void SetupBoss(SkillTypes bossType, Transform spawnLocation)
     {
-        ResetTimer();
-        uiManager.Timer_PopIn();
-        uiManager.BossHealth_PopIn();
+        CurrentBoss = bossType;
+        clone_SpawnLocation = spawnLocation;
+        InitBoss();
         switch (bossType)
         {
             case SkillTypes.Ice:

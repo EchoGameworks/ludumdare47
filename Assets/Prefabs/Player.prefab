@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7750370290208631488}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: GroundCheck
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -44,7 +44,7 @@ GameObject:
   - component: {fileID: 7750370290495038173}
   - component: {fileID: 7750370290495038172}
   - component: {fileID: 7750370290495038161}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Player
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -104,7 +104,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 5
   m_Sprite: {fileID: -467307283419413426, guid: a2e49c97b31287c4f8e982455e84bd51,
     type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -153,6 +153,12 @@ MonoBehaviour:
   invulnerableTimer: 0
   invulnerableTimerMax: 0
   IsVulnerable: 1
+  IsClone: 0
+  PersonalTimer: 0
+  cloneEventIndex: 0
+  cloneLayer:
+    serializedVersion: 2
+    m_Bits: 1024
   animator: {fileID: 0}
   m_MoveSpeed: 6
   m_JumpForce: 400

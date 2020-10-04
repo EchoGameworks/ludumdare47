@@ -34,7 +34,7 @@ public class Portal : MonoBehaviour
     {
         PlayerGO.transform.position = new Vector3(SpawnPosition.position.x, SpawnPosition.position.y, 0f);
         GoToCamera.SetActive(true);
-        gameManager.SetupBoss(BossType);
+        gameManager.SetupBoss(BossType, SpawnPosition);
         if(AwayFromCamera != null)
         {
             AwayFromCamera.SetActive(false);

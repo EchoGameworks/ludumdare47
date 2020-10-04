@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using Constants;
+using static AudioManager;
 
 public class PlayerController : Damageable
 {
@@ -65,6 +66,7 @@ public class PlayerController : Damageable
         ResetGame();
         if (!IsClone)
         {
+            MainColor = SpriteRend.color;
             ResetHealth();
         }
         
@@ -165,7 +167,7 @@ public class PlayerController : Damageable
         BulletEvent be = nextEventToExecute as BulletEvent;
         if (be != null)
         {
-            print("clone is bulleting");
+            //print("clone is bulleting");
             Main_Action(be.MouseScreenPos);
             cloneEventIndex++;
         }
@@ -227,7 +229,7 @@ public class PlayerController : Damageable
             if (colliders[i].gameObject != gameObject)
             {
                 m_Grounded = true;
-                //if (!wasGrounded) AudioManager.instance.PlaySound(AudioManager.SoundEffects.CharacterLanding);
+                if (!wasGrounded && !IsClone) AudioManager.instance.PlaySound(AudioManager.SoundEffects.CharacterLanding);
             }
         }
 
@@ -366,6 +368,7 @@ public class PlayerController : Damageable
                 if (!IsClone) gameManager.AddToQueue(new BulletEvent(PersonalTimer, mouseScreenPos));
                 GameObject bulletGO = Instantiate(prefab_Bullet, null, true);
                 Bullet b = bulletGO.GetComponent<Bullet>();
+                if(IsClone) b.HasSound = false;
                 b.spawnParent = this.gameObject;
                 
                 Vector3 mouseWorldPos = mainCam.ScreenToWorldPoint(new Vector3(mouseScreenPos.x, mouseScreenPos.y, 0f));

@@ -156,6 +156,7 @@ MonoBehaviour:
   invulnerableTimer: 0
   invulnerableTimerMax: 0.5
   IsVulnerable: 1
+  SpriteRend: {fileID: 7750370290495038163}
   IsClone: 0
   PersonalTimer: 0
   cloneEventIndex: 0

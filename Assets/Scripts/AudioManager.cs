@@ -5,22 +5,33 @@ using System.Linq;
 
 public class AudioManager : MonoBehaviour
 {
+    int songProgress = 0;
+
     public enum SoundEffects
     {
         None,
+
         CharacterLanding,
         CharacterHurt,
         CharacterDead,
-        Restart,
-        Powerup,
-        IceOrbSpawn,
-        IceOrbSplit,
-        IceDagger,
+
+        IceOrb_Spawn,
+        IceOrb_Split,
+        IcePlatform_Shatter,
+
+        IceDagger_Spawn,
+        IceDagger_Hit,   
+        
+        Icetopus_Hurt,
+        Icetopus_Dead,
+
+        Portal_Warp,
         Swap,
-        ShootBullet,
+
+        Bullet_Shoot,
         ShootFire,
         UseShockStream,
-        IcetopusHurt
+        
     }
 
     public static AudioManager instance;
@@ -34,24 +45,9 @@ public class AudioManager : MonoBehaviour
     public List<Music> MusicPlaylist;
     public List<Sound> Sounds;
 
-    float Mixer = 1f;
-
     [SerializeField] private bool canPlay = true;
     [SerializeField] private bool onHold = false;
     [SerializeField] private bool isNegativeOverruled = false;
-
-    public void MixToReverse()
-    {
-        LeanTween.value(gameObject, mix => Mixer = mix, Mixer, 0f, 1f);
- 
-    }
-
-    public void MixToForward()
-    {
-        LeanTween.value(gameObject, mix => Mixer = mix, Mixer, 1f, 1f);
-        //MusicPlaylist[0].source.volume = MasterMusicVolume * MusicPlaylist[0].Volume * Mixer;
-        //MusicPlaylist[1].source.volume = MasterMusicVolume * MusicPlaylist[1].Volume * (1 - Mixer);
-    }
 
     private void Awake()
     {
@@ -84,7 +80,9 @@ public class AudioManager : MonoBehaviour
             s.source.volume = s.Volume;
             s.source.pitch = s.Pitch;
         }
-        PlaySong();
+        
+        PlaySongs();
+        MixSongs();
     }
 
     private void Update()
@@ -92,34 +90,47 @@ public class AudioManager : MonoBehaviour
         //MusicPlaylist[0].source.volume = MasterMusicVolume * MusicPlaylist[0].Volume * Mixer;
         //MusicPlaylist[1].source.volume = MasterMusicVolume * MusicPlaylist[1].Volume * (1 - Mixer);
     }
-
-    public void PlaySong()
+    
+    public void MixSongs()
     {
-        //MusicPlaylist[0].source.volume = MasterMusicVolume * MusicPlaylist[0].Volume * Mixer;
-        //MusicPlaylist[0].source.Play();
-        //MusicPlaylist[1].source.volume = MasterMusicVolume * MusicPlaylist[1].Volume * (1 - Mixer);
-        //MusicPlaylist[1].source.Play();
+        //print("sp: " + songProgress);
+        switch(songProgress){
+            case 0:
+                LeanTween.value(gameObject, val => MusicPlaylist[0].source.volume = MasterMusicVolume * MusicPlaylist[0].Volume * val, 0f, 1f, 10f);
+                MusicPlaylist[1].source.volume = 0f;
+                MusicPlaylist[2].source.volume = 0f;
+                MusicPlaylist[3].source.volume = 0f;
+                break;
+            case 1:
+                LeanTween.value(gameObject, val => MusicPlaylist[0].source.volume = MasterMusicVolume * MusicPlaylist[0].Volume * val, 1f, 0f, 10f);
+                LeanTween.value(gameObject, val => MusicPlaylist[1].source.volume = MasterMusicVolume * MusicPlaylist[1].Volume * val, 0f, 1f, 10f);
+                break;
+            case 2:
+                LeanTween.value(gameObject, val => MusicPlaylist[1].source.volume = MasterMusicVolume * MusicPlaylist[1].Volume * val, 1f, 0f, 10f);
+                LeanTween.value(gameObject, val => MusicPlaylist[2].source.volume = MasterMusicVolume * MusicPlaylist[2].Volume * val, 0f, 1f, 10f);
+                break;
+            case 3:
+                LeanTween.value(gameObject, val => MusicPlaylist[2].source.volume = MasterMusicVolume * MusicPlaylist[2].Volume * val, 1f, 0f, 10f);
+                LeanTween.value(gameObject, val => MusicPlaylist[3].source.volume = MasterMusicVolume * MusicPlaylist[3].Volume * val, 0f, 1f, 10f);
+                break;
+        }
+        songProgress++;
     }
 
-    
+    public void PlaySongs()
+    {
+        MusicPlaylist[0].source.volume = MasterMusicVolume * MusicPlaylist[0].Volume;
+        MusicPlaylist[0].source.Play();
+        MusicPlaylist[1].source.volume = MasterMusicVolume * MusicPlaylist[1].Volume;
+        MusicPlaylist[1].source.Play();
+        MusicPlaylist[2].source.volume = MasterMusicVolume * MusicPlaylist[2].Volume;
+        MusicPlaylist[2].source.Play();
+        MusicPlaylist[3].source.volume = MasterMusicVolume * MusicPlaylist[3].Volume;
+        MusicPlaylist[3].source.Play();
 
-    //public void UpdateAudio(PlayerData pd)
-    //{
-    //    MasterMusicVolume = pd.vfx / 100f;
-    //    MasterSFXVolume = pd.sfx / 100f;
-    //    if(currentSong != null)
-    //    {
-    //        if(MasterMusicVolume == 0)
-    //        {
-    //            currentSong.source.Pause();
-    //        }
-    //        else
-    //        {
-    //            currentSong.source.volume = MasterMusicVolume * currentSong.Volume;
-    //            if (!currentSong.source.isPlaying) PlaySong();
-    //        }            
-    //    }
-    //}
+    }   
+
+
 
     public void PlaySound(SoundEffects soundEffect)
     {
@@ -198,7 +209,7 @@ public class AudioManager : MonoBehaviour
 
     public void Play_Restart()
     {
-        PlaySound(SoundEffects.Restart);
+        //PlaySound(SoundEffects.Restart);
     }
 
     //public void Play_SendPreview()

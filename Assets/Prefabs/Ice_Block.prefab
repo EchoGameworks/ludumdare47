@@ -122,5 +122,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ecf62180871e4344cb5835bf2203c88b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  delayDestroy: 5
+  delayDestroyMin: 8
+  delayDestroyMax: 15
   particleSystem: {fileID: 0}
+  DestroySound: 6

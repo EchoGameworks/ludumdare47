@@ -1,11 +1,17 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static AudioManager;
 
 public class Icetopus : Boss
 {
     public GameObject prefab_IceDagger;
     public GameObject prefab_IceOrb;
+
+    int moveID;
+    public SoundEffects IceDaggers_Spawn;
+
+    public List<Transform> MovePoints;
 
     private void Update()
     {
@@ -14,16 +20,16 @@ public class Icetopus : Boss
 
     public override void Action1()
     {
-        print("A1");
-        Action2();
-        //GameObject goOrb = Instantiate(prefab_IceOrb, null);
-        //goOrb.transform.position = this.transform.position;
-        //Ice_Homing orbHoming = goOrb.GetComponent<Ice_Homing>();
-        //orbHoming.Target = Player;
+        //print("A1");
+        GameObject goOrb = Instantiate(prefab_IceOrb, null);
+        goOrb.transform.position = this.transform.position;
+        Ice_Homing orbHoming = goOrb.GetComponent<Ice_Homing>();
+        orbHoming.Target = Player;
     }
 
     public override void Action2()
     {
+
         float spawnDistance = 3f;
         float spreadAngle = 120f;
         int spawnCount = 6;
@@ -42,25 +48,33 @@ public class Icetopus : Boss
             daggerGO.transform.position = this.transform.position + q * Vector3.right * spawnDistance;
             incrementAngle += incrementChange;
         }
-        
-        
+        AudioManager.instance.PlaySound(IceDaggers_Spawn);
     }
 
     public override void Action3()
     {
-        //print("A3");
         Action2();
+        Action4();
     }
 
     public override void Action4()
     {
-        //print("A4");
-        Action2();
+        if (moveID != 0)
+        {
+            if (LeanTween.isTweening(moveID)) return;
+        }
+
+        int r = Random.Range(0, MovePoints.Count - 1);
+        moveID = LeanTween.move(gameObject, MovePoints[r], 5f).id;
+        //print("moveID: " + moveID);
     }
 
     public override void Die()
     {
         base.Die();
+        AudioManager.instance.PlaySound(DeathSound);
+        LeanTween.scale(gameObject, Vector3.zero, 1f).setEaseInOutCirc();
+        GameManager.instance.BossDefeated();
         if (deathParticles != null)
         {
             deathParticles.Play();

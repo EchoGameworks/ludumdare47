@@ -116,6 +116,7 @@ MonoBehaviour:
   damage: 5
   spawnParent: {fileID: 0}
   delayToShootMax: 0
+  ShootSound: 13
 --- !u!50 &1255857070833115952
 Rigidbody2D:
   serializedVersion: 4

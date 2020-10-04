@@ -15,6 +15,9 @@ public class Damageable : MonoBehaviour
     public float invulnerableTimer;
     public float invulnerableTimerMax;
     public bool IsVulnerable = true;
+    public SpriteRenderer SpriteRend;
+    int flashID;
+    public Color MainColor;
 
     public void ResetHealth()
     {
@@ -28,12 +31,21 @@ public class Damageable : MonoBehaviour
         {
             invulnerableTimer -= Time.deltaTime;
         }
+        else
+        {
+            LeanTween.cancel(flashID);
+            SpriteRend.color = MainColor;
+        }
     }
 
     public void StartDamage(int dmg)
     {
         if (IsVulnerable && invulnerableTimer <= 0f)
         {
+            flashID = LeanTween.value(gameObject, val => SpriteRend.color = val,
+                MainColor,
+                new Color(1f, 0.2f, 0.2f, MainColor.a), 0.1f)
+                .setLoopPingPong().id;
             invulnerableTimer = invulnerableTimerMax;
             Health -= dmg;
             if (Health <= 0)
@@ -46,12 +58,10 @@ public class Damageable : MonoBehaviour
                 {
                     AudioManager.instance.PlaySound(HurtSound);
                 }
-                
-            }
 
+            }
             TakeDamage();
         }
-
     }
 
     public virtual void TakeDamage()

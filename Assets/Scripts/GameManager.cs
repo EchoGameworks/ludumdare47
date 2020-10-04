@@ -37,9 +37,16 @@ public class GameManager : MonoBehaviour
     private Icetopus icetopusLogic;
     public Transform SpawnLocation_Icetopus;
 
+    public GameObject BurnataurGO;
+    public Transform SpawnLocation_Burnataur;
+
     public GameObject Volture;
     public Transform SpawnLocation_Volture;
 
+    public GameObject UroGO;
+    public Transform SpawnLocation_Uro;
+    public Portal Portal_Uro;
+    int bossDefeatNum = 0;
     void Awake()
     {
         //Singleton
@@ -108,9 +115,10 @@ public class GameManager : MonoBehaviour
                 PlayerController clonePC = cloneGO.GetComponent<PlayerController>();
                 clonePC.ConfigureClone();
                 SpriteRenderer cloneSR = cloneGO.GetComponent<SpriteRenderer>();
-                cloneSR.color = new Color(0.35f, 0.35f, 0.35f, 0.75f);
+                clonePC.MainColor = new Color(0.35f, 0.35f, 0.35f, 0.75f);
+                cloneSR.color = clonePC.MainColor;
                 cloneGO.transform.position = clone_SpawnLocation.position;
-                print("spawn char");
+                //print("spawn char");
             }
             uiManager.UpdateTimer(Timer);
         }
@@ -178,6 +186,17 @@ public class GameManager : MonoBehaviour
                 Icetopus bossLogic = Icetopus.GetComponent<Icetopus>();
                 bossLogic.StartFight();
                 break;
+            case SkillTypes.Fire:
+                BurnataurGO.transform.position = SpawnLocation_Burnataur.position;
+                Burnataur burn_bossLogic = BurnataurGO.GetComponent<Burnataur>();
+                burn_bossLogic.StartFight();
+                burn_bossLogic.firstAction = true;
+                break;
+            case SkillTypes.Normal:
+                UroGO.transform.position = SpawnLocation_Uro.position;
+                Uro uro_bossLogic = UroGO.GetComponent<Uro>();
+                //uro_bossLogic.StartFight();
+                break;
         }
     }
 
@@ -191,6 +210,17 @@ public class GameManager : MonoBehaviour
             loadedScenes[i] = SceneManager.GetSceneAt(i);
         }
         return loadedScenes;
+    }
+
+    public void BossDefeated()
+    {
+        bossDefeatNum++;
+        AudioManager.instance.MixSongs();        
+        if(bossDefeatNum > 1)
+        {
+            Portal_Uro.OpenPortal();
+        }
+
     }
 
     private void OnEnable()

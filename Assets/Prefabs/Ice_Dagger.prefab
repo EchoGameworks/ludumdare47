@@ -100,6 +100,7 @@ MonoBehaviour:
   damage: 7
   spawnParent: {fileID: 0}
   delayToShootMax: 1
+  ShootSound: 8
 --- !u!70 &2392104588817442883
 CapsuleCollider2D:
   m_ObjectHideFlags: 0

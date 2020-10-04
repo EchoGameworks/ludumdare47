@@ -24,7 +24,7 @@ public class Portal : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (!IsComplete)
+        if (!IsComplete && collision.gameObject == PlayerGO)
         {
             EnterPortal();
         }
@@ -35,7 +35,8 @@ public class Portal : MonoBehaviour
         PlayerGO.transform.position = new Vector3(SpawnPosition.position.x, SpawnPosition.position.y, 0f);
         GoToCamera.SetActive(true);
         gameManager.SetupBoss(BossType, SpawnPosition);
-        if(AwayFromCamera != null)
+        AudioManager.instance.PlaySound(AudioManager.SoundEffects.Portal_Warp);
+        if (AwayFromCamera != null)
         {
             AwayFromCamera.SetActive(false);
         }
@@ -48,5 +49,12 @@ public class Portal : MonoBehaviour
         IsComplete = true;
         CompleteFillGO.SetActive(true);
         GetComponent<BoxCollider2D>().enabled = false;
+    }
+
+    public void OpenPortal()
+    {
+        IsComplete = false;
+        CompleteFillGO.SetActive(false);
+        GetComponent<BoxCollider2D>().enabled = true;
     }
 }

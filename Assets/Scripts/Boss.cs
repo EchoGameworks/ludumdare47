@@ -16,9 +16,11 @@ public class Boss : Damageable
     public RectTransform WinInstructions;
     public GameObject ReturnPortal;
     public Portal OriginalPortal;
+    
 
     void Start()
     {
+        MainColor = SpriteRend.color;
         ReturnPortal.transform.localScale = Vector3.zero;
         WinInstructions.localScale = Vector3.zero;
         uiManager = GameManager.instance.uiManager;

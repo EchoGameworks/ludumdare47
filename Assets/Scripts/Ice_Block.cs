@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static AudioManager;
 
 public class Ice_Block : MonoBehaviour
 {
@@ -8,6 +9,7 @@ public class Ice_Block : MonoBehaviour
     public float delayDestroyMax = 15f;
     private bool alreadyDestroyed = false;
     public ParticleSystem particleSystem;
+    public SoundEffects DestroySound;
 
     void Start()
     {
@@ -18,6 +20,7 @@ public class Ice_Block : MonoBehaviour
     {
         if (alreadyDestroyed) return;
         alreadyDestroyed = true;
+        AudioManager.instance.PlaySound(DestroySound);
         if (particleSystem != null)
         {
             particleSystem.Play();

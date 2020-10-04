@@ -63,7 +63,11 @@ public class PlayerController : Damageable
         input.Player.Drop.performed += Drop_performed;
         input.Player.Action.performed += Action_performed;
         ResetGame();
-        ResetHealth();
+        if (!IsClone)
+        {
+            ResetHealth();
+        }
+        
 
         //var seq = LeanTween.sequence();
         //seq.append(5f);
@@ -102,22 +106,32 @@ public class PlayerController : Damageable
     public override void Die()
     {
         //print("died");
+        if (HasSound)
+        {
+            AudioManager.instance.PlaySound(DeathSound);
+        }
         gameManager.uiManager.ShowDeathBanner();
         gameManager.Respawn();
     }
 
     public override void TakeDamage()
     {
-        uiManager.UpdatePlayerHealth(Health / (float)HealthMax);
+        if (!IsClone)
+        {
+            uiManager.UpdatePlayerHealth(this.Health / (float)this.HealthMax);
+        }        
     }
 
 
     
     public void ConfigureClone()
     {
+        IsClone = true;
         Start();
         this.gameObject.layer = LayerMask.NameToLayer("Ghost");
-        IsClone = true;
+        
+        HasSound = false;
+        base.IsVulnerable = false;
         nextEventToExecute = gameManager.listEvents[cloneEventIndex];
     }
 
@@ -165,6 +179,7 @@ public class PlayerController : Damageable
 
     private void Update()
     {
+        base.InvulnerableTimerUpdate();
         if (IsClone)
         {
             if (gameManager.listEvents.Count - 1 == cloneEventIndex)
@@ -368,7 +383,7 @@ public class PlayerController : Damageable
     {
         print("player defeated boss");
         PersonalTimer = 0f;
-        Health += 50;
+        Health = 100;
         TakeDamage();
     }
 

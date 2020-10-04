@@ -2,13 +2,16 @@
 using System.Collections.Generic;
 using UnityEngine;
 using Constants;
+using static AudioManager;
 
 public class Damageable : MonoBehaviour
 {
     //public UnitTypes UnitType;
     public int Health;
     public int HealthMax;
-
+    public bool HasSound = true;
+    public SoundEffects HurtSound;
+    public SoundEffects DeathSound;
     public float invulnerableTimer;
     public float invulnerableTimerMax;
     public bool IsVulnerable = true;
@@ -37,6 +40,14 @@ public class Damageable : MonoBehaviour
             {
                 Die();
             }
+            else
+            {
+                if (HasSound)
+                {
+                    AudioManager.instance.PlaySound(HurtSound);
+                }
+                
+            }
 
             TakeDamage();
         }
@@ -50,7 +61,7 @@ public class Damageable : MonoBehaviour
 
     public virtual void Die()
     {
-        print("this died");
+
     }
 
 }

@@ -15,10 +15,11 @@ public class Icetopus : Boss
     public override void Action1()
     {
         print("A1");
-        GameObject goOrb = Instantiate(prefab_IceOrb, null);
-        goOrb.transform.position = this.transform.position;
-        Ice_Homing orbHoming = goOrb.GetComponent<Ice_Homing>();
-        orbHoming.Target = Player;
+        Action2();
+        //GameObject goOrb = Instantiate(prefab_IceOrb, null);
+        //goOrb.transform.position = this.transform.position;
+        //Ice_Homing orbHoming = goOrb.GetComponent<Ice_Homing>();
+        //orbHoming.Target = Player;
     }
 
     public override void Action2()

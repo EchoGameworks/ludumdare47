@@ -68,6 +68,10 @@ public class UIManager : MonoBehaviour
 
     public void UpdatePlayerHealth(float healthPerc)
     {
+        if(healthPerc == 1)
+        {
+            print("new health");
+        }
         PlayerHealth.fillAmount = healthPerc;
     }
 

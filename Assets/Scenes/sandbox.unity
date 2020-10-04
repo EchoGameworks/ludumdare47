@@ -20092,12 +20092,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Health: 0
   HealthMax: 120
+  HasSound: 1
+  HurtSound: 0
+  DeathSound: 0
   invulnerableTimer: 0
   invulnerableTimerMax: 1
   IsVulnerable: 1
   Player: {fileID: 0}
   ActionTimer: 0
-  ActionTimerMax: 3
+  ActionTimerMax: 2
   ContactDamage: 7
   isFighting: 0
   deathParticles: {fileID: 0}
@@ -21909,6 +21912,7 @@ GameObject:
   - component: {fileID: 2082846132}
   - component: {fileID: 2082846133}
   - component: {fileID: 2082846134}
+  - component: {fileID: 2082846135}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -22046,7 +22050,7 @@ MonoBehaviour:
   IsTesting: 1
   RunTimer: 0
   cloneList: []
-  Timer: 3
+  Timer: 5
   Spawn_PlayerStart: {fileID: 757666325}
   Icetopus: {fileID: 1855601349}
   SpawnLocation_Icetopus: {fileID: 1296762170}
@@ -22086,6 +22090,35 @@ MonoBehaviour:
   m_CameraActivatedEvent:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &2082846135
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2082846128}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4fcd09cb38667b44891d1367d8733001, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  MasterMusicVolume: 1
+  MasterSFXVolume: 1
+  MusicPlaylist: []
+  Sounds:
+  - SoundName: 2
+    Clip: {fileID: 8300000, guid: 42b9eda189405aa4f87163fc0b7ca2ba, type: 3}
+    Volume: 1
+    Pitch: 1
+    source: {fileID: 0}
+  - SoundName: 3
+    Clip: {fileID: 8300000, guid: 60558f293ed059349aa545fe15e14866, type: 3}
+    Volume: 1
+    Pitch: 1
+    source: {fileID: 0}
+  canPlay: 1
+  onHold: 0
+  isNegativeOverruled: 0
 --- !u!1 &2110469120
 GameObject:
   m_ObjectHideFlags: 0

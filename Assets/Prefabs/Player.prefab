@@ -150,8 +150,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Health: 0
   HealthMax: 100
+  HasSound: 1
+  HurtSound: 2
+  DeathSound: 3
   invulnerableTimer: 0
-  invulnerableTimerMax: 0
+  invulnerableTimerMax: 0.5
   IsVulnerable: 1
   IsClone: 0
   PersonalTimer: 0

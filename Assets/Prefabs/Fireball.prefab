@@ -98,7 +98,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   particleSystem: {fileID: 0}
   speed: 4
-  damage: 7
+  damage: 18
   spawnParent: {fileID: 0}
   delayToShootMax: 0.5
   ShootSound: 8

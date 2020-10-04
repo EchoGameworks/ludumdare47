@@ -54,7 +54,7 @@ public class PlayerController : Damageable
         animator = GetComponent<Animator>();
         mainCam = Camera.main;
         gameManager = GameManager.instance;
-        gameManager.playerController = this;
+        
         uiManager = gameManager.uiManager;
         input = gameManager.Controls;
         input.Player.Move.performed += Move_performed;
@@ -67,6 +67,7 @@ public class PlayerController : Damageable
         ResetGame();
         if (!IsClone)
         {
+            gameManager.playerController = this;
             MainColor = SpriteRend.color;
             ResetHealth();
             //if (gameManager.IsTesting) gameManager.BossDefeated();
@@ -174,6 +175,14 @@ public class PlayerController : Damageable
             nextEventToExecute = gameManager.listEvents[cloneEventIndex];
         }
         
+    }
+
+    public void ResetPlayerHealth()
+    {
+        
+        this.Health = this.HealthMax;
+        //print(this.Health);
+        TakeDamage();
     }
 
     private void Update()

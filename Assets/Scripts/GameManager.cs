@@ -38,12 +38,14 @@ public class GameManager : MonoBehaviour
     public Transform SpawnLocation_Icetopus;
 
     public GameObject BurnataurGO;
+    private Burnataur burnatorLogic;
     public Transform SpawnLocation_Burnataur;
 
     public GameObject Volture;
     public Transform SpawnLocation_Volture;
 
     public GameObject UroGO;
+    private Uro uorLogic;
     public Transform SpawnLocation_Uro;
     public Portal Portal_Uro;
     int bossDefeatNum = 0;
@@ -71,6 +73,9 @@ public class GameManager : MonoBehaviour
     {
         listEvents = new List<EventData>();
         icetopusLogic = Icetopus.GetComponent<Icetopus>();
+        burnatorLogic = BurnataurGO.GetComponent<Burnataur>();
+        uorLogic = UroGO.GetComponent<Uro>();
+
         if (!IsTesting)
         {
             foreach (GameObject go in InitCameras)
@@ -165,10 +170,12 @@ public class GameManager : MonoBehaviour
     public void Respawn()
     {
         icetopusLogic.StopFight();
-
+        burnatorLogic.StopFight();
+        uorLogic.StopFight();
+        ClearBossArea();
         StopTimer();
         uiManager.Timer_PopOut();
-        playerController.ResetHealth();
+        playerController.ResetPlayerHealth();
         uiManager.BossHealth_PopOut();
         PlayerGO.transform.position = RespawnLocation.position;
         RespawnTransition.RespawnReset();

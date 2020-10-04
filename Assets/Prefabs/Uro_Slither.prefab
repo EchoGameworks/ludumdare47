@@ -26,7 +26,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1571792537573654041}
   m_LocalRotation: {x: -0, y: -0, z: 0.70710677, w: 0.7071068}
-  m_LocalPosition: {x: 117.26, y: -51.5, z: -9}
+  m_LocalPosition: {x: 117.51, y: -58, z: -9}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 988412792677929129}
@@ -47,7 +47,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   particleSystem: {fileID: 0}
   speed: 16
-  damage: 10
+  damage: 16
   spawnParent: {fileID: 0}
   delayToShootMax: 0
   ShootSound: 4

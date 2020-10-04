@@ -3721,7 +3721,7 @@ BoxCollider2D:
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0.05}
@@ -7452,8 +7452,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4f8fc674de2bf4b459dba504f36077a2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Health: 120
-  HealthMax: 120
+  Health: 100
+  HealthMax: 100
   HasSound: 1
   HurtSound: 9
   DeathSound: 10
@@ -7572,7 +7572,7 @@ CapsuleCollider2D:
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0.01}
@@ -15109,6 +15109,18 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 7750370289594163034}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1605565832 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7750370290495038173, guid: 071b8015252ef884c97ba9d9871ef5c5,
+    type: 3}
+  m_PrefabInstance: {fileID: 7750370289594163034}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1605565829}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 725404ac8d7b5ce4e9678519b25a8fd2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!4 &1605565834 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7750370290495038160, guid: 071b8015252ef884c97ba9d9871ef5c5,
@@ -28842,7 +28854,7 @@ CircleCollider2D:
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0.24}
@@ -32015,7 +32027,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2fa37d4df881d7e4cb1158d7fab0242c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  CurrentBoss: 0
+  CurrentBoss: 2
   uiManager: {fileID: 1846893938}
   StartCamera: {fileID: 206136531}
   InitCameras:
@@ -32029,15 +32041,15 @@ MonoBehaviour:
   - {fileID: 1709198733}
   prefab_Player: {fileID: 7750370290495038175, guid: 071b8015252ef884c97ba9d9871ef5c5,
     type: 3}
-  clone_SpawnLocation: {fileID: 0}
+  clone_SpawnLocation: {fileID: 1797158135}
   PlayerGO: {fileID: 1605565829}
   RespawnLocation: {fileID: 801579149}
   RespawnTransition: {fileID: 2018447247}
-  playerController: {fileID: 0}
+  playerController: {fileID: 1605565832}
   IsTesting: 0
   RunTimer: 0
   cloneList: []
-  Timer: 0.5386916
+  Timer: 1.423571
   Spawn_PlayerStart: {fileID: 757666325}
   Icetopus: {fileID: 1855601349}
   SpawnLocation_Icetopus: {fileID: 1296762170}

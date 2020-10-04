@@ -38,6 +38,7 @@ public class Burnataur : Boss
         firstAction = false;
         Fireballs1();
         Fireballs2();
+        Action4();
     }
 
     public override void Action4()

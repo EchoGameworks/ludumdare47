@@ -48,6 +48,7 @@ public class Damageable : MonoBehaviour
                 .setLoopPingPong().id;
             invulnerableTimer = invulnerableTimerMax;
             Health -= dmg;
+            TakeDamage();
             if (Health <= 0)
             {
                 Die();
@@ -61,7 +62,7 @@ public class Damageable : MonoBehaviour
                 }
 
             }
-            TakeDamage();
+            
         }
     }
 

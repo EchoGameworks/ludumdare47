@@ -107,7 +107,7 @@ public class Boss : Damageable
     {
         if (collision.gameObject == Player)
         {
-            print("contact damage");
+            //print("contact damage");
             Player.GetComponent<PlayerController>().StartDamage(ContactDamage);
         }
     }

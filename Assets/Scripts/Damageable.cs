@@ -45,7 +45,7 @@ public class Damageable : MonoBehaviour
             flashID = LeanTween.value(gameObject, val => SpriteRend.color = val,
                 MainColor,
                 new Color(1f, 0.2f, 0.2f, MainColor.a), 0.1f)
-                .setLoopPingPong().id;
+                .setLoopPingPong(100).id;
             invulnerableTimer = invulnerableTimerMax;
             Health -= dmg;
             TakeDamage();

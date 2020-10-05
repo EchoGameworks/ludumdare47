@@ -70,7 +70,11 @@ public class PlayerController : Damageable
             gameManager.playerController = this;
             MainColor = SpriteRend.color;
             ResetHealth();
-            //if (gameManager.IsTesting) gameManager.BossDefeated();
+            ////if (gameManager.IsTesting)
+            ////{
+            ////    gameManager.BossDefeated();
+            ////    gameManager.BossDefeated();
+            ////}
         }
 
     }

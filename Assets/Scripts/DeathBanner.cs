@@ -47,8 +47,8 @@ public class DeathBanner : MonoBehaviour
 
     public void HideScreen()
     {
-        GameManager.instance.playerController.ResetPlayerHealth();
-        IsShowingDead = false;
+        //GameManager.instance.playerController.ResetPlayerHealth();
+        LeanTween.delayedCall(1f, () => IsShowingDead = false);
         LeanTween.value(gameObject, val => DiedRT.anchoredPosition = val,
             DiedRT.anchoredPosition, new Vector2(DiedRT.anchoredPosition.x, 500f), 0.3f)
             .setEaseOutBounce();

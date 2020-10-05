@@ -32027,7 +32027,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2fa37d4df881d7e4cb1158d7fab0242c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  CurrentBoss: 2
+  CurrentBoss: 0
   uiManager: {fileID: 1846893938}
   StartCamera: {fileID: 206136531}
   InitCameras:
@@ -32041,7 +32041,7 @@ MonoBehaviour:
   - {fileID: 1709198733}
   prefab_Player: {fileID: 7750370290495038175, guid: 071b8015252ef884c97ba9d9871ef5c5,
     type: 3}
-  clone_SpawnLocation: {fileID: 1797158135}
+  clone_SpawnLocation: {fileID: 0}
   PlayerGO: {fileID: 1605565829}
   RespawnLocation: {fileID: 801579149}
   RespawnTransition: {fileID: 2018447247}
@@ -32049,7 +32049,7 @@ MonoBehaviour:
   IsTesting: 0
   RunTimer: 0
   cloneList: []
-  Timer: 1.423571
+  Timer: 3.896692
   Spawn_PlayerStart: {fileID: 757666325}
   Icetopus: {fileID: 1855601349}
   SpawnLocation_Icetopus: {fileID: 1296762170}
